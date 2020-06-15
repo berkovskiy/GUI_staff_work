@@ -4,7 +4,7 @@ from designer.login import Ui_MainWindow  # импорт нашего сгене
 from designer.lk_admin import Ui_LK_admin
 import sys
 
-from bd.queries_to_the_DB import serch_user_profile
+from bd.queries_to_the_DB import serch_user_profile, close_connection, serch_users_data
 
 
 class Mywindow(QtWidgets.QMainWindow):
@@ -23,14 +23,33 @@ class Mywindow(QtWidgets.QMainWindow):
             user_line = self.ui.lineEdit.text()
             password_line = self.ui.lineEdit_2.text()
             for i in serch_user_profile(user_line):
-                self.user = i[0]
-                self.password = i[1]
-            if user_line == self.user or password_line == self.password:
-                self.close()
-                self.two_windo = Lk_admin()
-                self.two_windo.show()
+                self.user = i[1] #Задаем переменную Юзер в метод
+                self.password = i[2] #Задаем переменную Пароль в метод
+                self.id = i[0]
+                """
+                Задаем переменную ID в метод. Что бы в последующем найти профиль пользователя из таблици users_data
+                """
+            if user_line == self.user and password_line == self.password:
+                for key in serch_users_data(self.id):
+                    if key[6] == 'admin':
+                        self.close()
+                        self.two_windo = Lk_admin()
+                        self.two_windo.show()
+                        close_connection()
+                    if key[6] == 'nach1':
+                        QMessageBox.question(self, "Авторизация пройдена", "Авторизован как Nach1",
+                                            QMessageBox.Ok)
+                    if key[6] == 'nach2':
+                        QMessageBox.question(self, "Авторизация пройдена", "Авторизован как nach2",
+                                             QMessageBox.Ok)
+                    if key[6] == 'nach3':
+                        QMessageBox.question(self, "Авторизация пройдена", "Авторизован как nach3",
+                                             QMessageBox.Ok)
+            else:
+                QMessageBox.critical(self, 'Ошибка авторизации', "Ввведены не корректный логин и пароль")
         except Exception:
             QMessageBox.critical(self, 'Ошибка авторизации', "Ввведены не корректный логин и пароль")
+
 
 
 class Lk_admin(QtWidgets.QMainWindow):
