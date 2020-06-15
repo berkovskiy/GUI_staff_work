@@ -6,7 +6,7 @@ import sys
 
 from bd.queries_to_the_DB import serch_user_profile, close_connection, serch_users_data
 
-
+# Самое первое окно, где проходит вся авторизация и проверка на соответствие данных каждому пользователю
 class Mywindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(Mywindow, self).__init__()
@@ -51,7 +51,7 @@ class Mywindow(QtWidgets.QMainWindow):
             QMessageBox.critical(self, 'Ошибка авторизации', "Ввведены не корректный логин и пароль")
 
 
-
+# Окно для админа.
 class Lk_admin(QtWidgets.QMainWindow):
     def __init__(self):
         super(Lk_admin, self).__init__()
